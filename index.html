@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="register.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Nalan Fitness</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.2/firebase-database-compat.js"></script>
+    <style>
+      html {
+        scroll-behavior: smooth; /* Enables smooth scrolling */
+      }
+
+      /* Add custom styling to ensure the form and chart are side by side */
+      @media (max-width: 768px) {
+        .registration-container {
+          flex-direction: column;
+        }
+      }
+
+      .registration-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        padding: 50px;
+      }
+
+      .form-container,
+      .chart-container {
+        flex: 1;
+      }
+
+      .form-container {
+        max-width: 500px;
+        background-color: #f4f6f9;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .form-container:hover {
+        transform: scale(1.05);
+      }
+
+      .form-container h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #555;
+      }
+
+      .form-control {
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 16px;
+        margin-bottom: 20px;
+        border: 2px solid #ddd;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        border-radius: 30px;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+
+      .alert {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        display: none;
+      }
+
+      /* Chart Styling */
+      #registration-chart {
+        max-width: 500px;
+        height: 100%;
+        margin-top: 30px;
+      }
+
+      /* Header Styling */
+      .header__btn a {
+        background-color: #007bff;
+        color: white;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
+
+      .header__btn a:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <div class="nav__header">
+          <div class="nav__logo">
+            <a href="#">
+              <img src="assets/NALAN.png" alt="logo" class="logo-white" />
+              <img src="assets/NALAN.png" alt="logo" class="logo-dark" />
+            </a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#register">Join Now</a></li>
+        </ul>
+        <div class="nav__btns">
+          <a href="#register" class="btn">Join Now</a>
+        </div>
+      </nav>
+      <div class="section__container header__container" id="home">
+        <div class="header__content">
+          <h1>SRI LANKAN NO 1 FITNESS CENTER</h1>
+          <h2>NOW IN KELANIYA</h2>
+          <p>
+            Best fitness center in Kelaniya. If you are a university student,
+            you can get offers. Every step you take brings you closer to a healthier,
+            happier you. Let's make fitness a lifestyle!
+          </p>
+          <div class="header__btn">
+            <a href="#register" class="btn">Register Now</a>
+          </div>
+        </div>
+        <div class="header__image">
+          <img src="assets/service.png" alt="header" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Live Stats and Registration Form Side by Side -->
+    <section class="text-center mt-5 registration-container" id="register">
+      <div class="form-container">
+        <h2>Register for Your Gym Membership</h2>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" placeholder="Enter your age" required />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" class="form-control" id="mobile" placeholder="Enter your mobile number" required />
+          </div>
+          <div class="form-group">
+            <label for="slipNumber">Payment Slip Number</label>
+            <input type="text" class="form-control" id="slipNumber" placeholder="Enter payment slip number" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <div class="alert alert-success mt-3">Registration successful!</div>
+      </div>
+
+      <div class="chart-container">
+        <h2>Pre Registered This Month</h2>
+        <div class="display-4 font-weight-bold" id="registration-count">0</div>
+        <p id="goal-text">Loading...</p>
+        <canvas id="registration-chart" width="400" height="200"></canvas>
+      </div>
+    </section>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCe0ST5iqdQifZV__vEX0ukPwB0_rNp-MA",
+        authDomain: "nalan-gym.firebaseapp.com",
+        databaseURL: "https://nalan-gym-default-rtdb.firebaseio.com",
+        projectId: "nalan-gym",
+        storageBucket: "nalan-gym.firebasestorage.app",
+        messagingSenderId: "725488930348",
+        appId: "1:725488930348:web:03bacc8637ffcf1a770b89",
+        measurementId: "G-QZN436KBVR",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Reference to the database
+      const contactFormDB = firebase.database().ref("registrations");
+
+      // Function to get the count of registrations
+      function getRegistrationCount() {
+        contactFormDB.once("value", function(snapshot) {
+          const registrations = snapshot.numChildren();  // Get number of registrations
+          document.getElementById("registration-count").textContent = registrations;
+          document.getElementById("goal-text").textContent = "Total registrations this month";
+        });
+      }
+
+      // Call the function to update the registration count initially
+      getRegistrationCount();
+
+      // Set up a real-time listener to update the count when a new registration is added
+      contactFormDB.on("child_added", function() {
+        getRegistrationCount();
+      });
+
+      contactFormDB.on("child_removed", function() {
+        getRegistrationCount();
+      });
+
+      // Firebase form submission and data saving
+      document.getElementById("contactForm").addEventListener("submit", submitForm);
+
+      function submitForm(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const mobile = document.getElementById("mobile").value;
+        const slipNumber = document.getElementById("slipNumber").value;
+
+        // Save data to Firebase
+        saveMessages(name, age, mobile, slipNumber);
+
+        // Show success alert
+        document.querySelector(".alert").style.display = "block";
+
+        // Hide the alert after 3 seconds
+        setTimeout(() => {
+          document.querySelector(".alert").style.display = "none";
+        }, 3000);
+
+        // Reset the form
+        document.getElementById("contactForm").reset();
+      }
+
+      function saveMessages(name, age, mobile, slipNumber) {
+        const newRegistration = contactFormDB.push();
+        newRegistration.set({
+          name: name,
+          age: age,
+          mobile: mobile,
+          slipNumber: slipNumber,
+        });
+      }
+
+      // Chart.js for live stats example
+      const ctx = document.getElementById("registration-chart").getContext("2d");
+      const registrationChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+          datasets: [
+            {
+              label: "Registrations",
+              data: [10, 15, 12, 18],
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
